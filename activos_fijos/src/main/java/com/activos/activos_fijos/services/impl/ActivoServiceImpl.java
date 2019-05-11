@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import com.activos.activos_fijos.entities.ActivoEntity;
 import com.activos.activos_fijos.repositories.ActivoRepository;
 import com.activos.activos_fijos.services.ActivoService;
 import com.activos.activos_fijos.util.IMapper;
+import com.activos.activos_fijos.util.exceptions.ArgumentosInvalidosException;
+import com.activos.activos_fijos.util.exceptions.RespuestaVaciaException;
 
 @Service
 public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, ActivoEntity> {
@@ -27,59 +30,74 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	ModelMapper mapper;
 
 	@Override
-	public List<ActivoDTO> listarActivos() {
+	public List<ActivoDTO> listarActivos() throws RespuestaVaciaException {
 		List<ActivoDTO> dtos = new ArrayList<>();
-		for (ActivoEntity activoEntity : activoRepository.findAll()) {
+		Iterable<ActivoEntity> entities = activoRepository.findAll();
+		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
+			throw new RespuestaVaciaException("No se encontraron registros de activos.");
+		for (ActivoEntity activoEntity : entities) {
 			dtos.add(aDto(activoEntity));
 		}
 		return dtos;
 	}
 
 	@Override
-	public void guardarActivo(ActivoDTO activoDTO) throws Exception {
+	public ActivoDTO guardarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException {
 		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
-		if(activo.isPresent())
-			throw new Exception("Ya existe un registro con el serial ingresado");
+		if (activo.isPresent())
+			throw new ArgumentosInvalidosException("Ya existe un registro con el serial ingresado.");
 		validarParametros(activoDTO);
-		activoRepository.save(aEntity(activoDTO));
-	}
-
-	@Override
-	public ActivoDTO actualizarActivo(ActivoDTO activoDTO) throws Exception {
-		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
-		if (!activo.isPresent()) {
-			throw new Exception("El activo a actualizar no existe en la base de datos");
-		}
 		return aDto(activoRepository.save(aEntity(activoDTO)));
 	}
 
 	@Override
-	public List<ActivoDTO> consultarPorTipo(String tipo) throws Exception {
+	public ActivoDTO actualizarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException {
+		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
+		if (!activo.isPresent()) {
+			throw new ArgumentosInvalidosException("El activo a actualizar no existe en la base de datos.");
+		}
+		if (activoDTO.getFechaBaja().after(activo.get().getFechaCompra()))
+			throw new ArgumentosInvalidosException("La fecha de baja ingresada no puede ser mayor a la fecha de compra del activo.");
+		return aDto(activoRepository.save(aEntity(activoDTO)));
+	}
+
+	@Override
+	public List<ActivoDTO> consultarPorTipo(String tipo) throws ArgumentosInvalidosException, RespuestaVaciaException {
 		if (tipo == null || tipo.isEmpty())
-			throw new Exception("El parámetro tipo no debe ser nulo o estar vacío");
+			throw new ArgumentosInvalidosException("El parámetro tipo no debe ser nulo o estar vacío.");
 		List<ActivoDTO> dtos = new ArrayList<>();
-		for (ActivoEntity entity : activoRepository.findByTipo(tipo)) {
+		Iterable<ActivoEntity> entities = activoRepository.findByTipo(tipo);
+		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
+			throw new RespuestaVaciaException("No hay registros de activos que coincidan con el tipo de activo ingresado.");
+		for (ActivoEntity entity : entities) {
 			dtos.add(aDto(entity));
 		}
 		return dtos;
 	}
 
 	@Override
-	public List<ActivoDTO> consultarPorFechaCompra(String fechaCompra) throws ParseException {
+	public List<ActivoDTO> consultarPorFechaCompra(String fechaCompra) throws ParseException, ArgumentosInvalidosException, RespuestaVaciaException {
+		if (fechaCompra == null || fechaCompra.isEmpty())
+			throw new ArgumentosInvalidosException("El parámetro fechaCompra no debe ser nulo o estar vacío.");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date fecha = format.parse(fechaCompra);
 		List<ActivoDTO> dtos = new ArrayList<>();
-		for (ActivoEntity entity : activoRepository.findByFechaCompra(fecha)) {
+		Iterable<ActivoEntity> entities = activoRepository.findByFechaCompra(fecha);
+		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
+			throw new RespuestaVaciaException("No hay registros de activos que coincidan con la fecha ingresada.");
+		for (ActivoEntity entity : entities) {
 			dtos.add(aDto(entity));
 		}
 		return dtos;
 	}
 
 	@Override
-	public ActivoDTO consultarPorSerial(Integer serial) throws Exception {
+	public ActivoDTO consultarPorSerial(Integer serial) throws ArgumentosInvalidosException, RespuestaVaciaException {
+		if (serial == null || serial <= 0)
+			throw new ArgumentosInvalidosException("El parámetro serial no debe ser nulo o estar vacío.");
 		Optional<ActivoEntity> activo = activoRepository.findById(serial);
 		if (!activo.isPresent())
-			throw new Exception("No hay registros que coincidan con el serial ingresado");
+			throw new RespuestaVaciaException("No hay registros que coincidan con el serial ingresado.");
 		return aDto(activo.get());
 	}
 
@@ -93,32 +111,32 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 		return mapper.map(a, ActivoEntity.class);
 	}
 
-	private void validarParametros(ActivoDTO activo) throws Exception {
+	private void validarParametros(ActivoDTO activo) throws ArgumentosInvalidosException {
 		if (activo == null)
-			throw new Exception("El activo no debe ser nulo");
+			throw new ArgumentosInvalidosException("El activo no debe ser nulo.");
 		if (activo.getAlto() < 0)
-			throw new Exception("El campo alto debe ser mayor a cero");
+			throw new ArgumentosInvalidosException("El campo alto debe ser mayor a cero.");
 		if (activo.getAncho() < 0)
-			throw new Exception("El campo ancho debe ser mayor a cero");
+			throw new ArgumentosInvalidosException("El campo ancho debe ser mayor a cero.");
 		if (activo.getColor() == null || activo.getColor().isEmpty())
-			throw new Exception("El campo color no debe ser nulo o estar vacío");
+			throw new ArgumentosInvalidosException("El campo color no debe ser nulo o estar vacío.");
 		if (activo.getEstado() <= 0)
-			throw new Exception("Por favor ingrese un estado válido");// Ingrese un estado válido
+			throw new ArgumentosInvalidosException("Por favor ingrese un estado válido.");
 		if (activo.getFechaCompra() == null)
-			throw new Exception("El campo fecha de compra no debe ser nulo o estar vacío");
+			throw new ArgumentosInvalidosException("El campo fecha de compra no debe ser nulo o estar vacío.");
 		if (activo.getLargo() < 0)
-			throw new Exception("El campo largo debe ser mayor a cero");
+			throw new ArgumentosInvalidosException("El campo largo debe ser mayor a cero.");
 		if (activo.getNombre() == null || activo.getNombre().isEmpty())
-			throw new Exception("El campo nombre no debe ser nulo o estar vacío");
+			throw new ArgumentosInvalidosException("El campo nombre no debe ser nulo o estar vacío.");
 		if (activo.getNumeroInterno() < 0)
-			throw new Exception("El campo numero interno debe ser mayor a 0");
+			throw new ArgumentosInvalidosException("El campo numero interno debe ser mayor a 0.");
 		if (activo.getPeso() < 0)
-			throw new Exception("El campo peso debe ser mayor a cero");
+			throw new ArgumentosInvalidosException("El campo peso debe ser mayor a cero.");
 		if (activo.getSerial() < 0)
-			throw new Exception("El campo serial debe ser mayor a cero");
+			throw new ArgumentosInvalidosException("El campo serial debe ser mayor a cero.");
 		if (activo.getTipo() == null || activo.getTipo().isEmpty())
-			throw new Exception("El campo tipo no debe ser nulo o estar vacío");
+			throw new ArgumentosInvalidosException("El campo tipo no debe ser nulo o estar vacío.");
 		if (activo.getValor() < 0)
-			throw new Exception("El campo valor debe ser mayor a 0");
+			throw new ArgumentosInvalidosException("El campo valor debe ser mayor a 0.");
 	}
 }

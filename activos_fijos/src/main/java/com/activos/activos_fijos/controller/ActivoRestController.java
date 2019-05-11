@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activos.activos_fijos.dtos.ActivoDTO;
 import com.activos.activos_fijos.services.ActivoService;
+import com.activos.activos_fijos.util.exceptions.ArgumentosInvalidosException;
+import com.activos.activos_fijos.util.exceptions.RespuestaVaciaException;
 
 @RestController
 @RequestMapping("/activos")
@@ -25,34 +27,34 @@ public class ActivoRestController {
 	private ActivoService activoService;
 
 	@GetMapping("/listar")
-	public ResponseEntity<List<ActivoDTO>> listar() {
+	public ResponseEntity<List<ActivoDTO>> listar() throws RespuestaVaciaException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.listarActivos(), HttpStatus.OK);
 	}
 
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/guardar")
-	public ResponseEntity guardarActivo(@RequestBody ActivoDTO activoDTO) throws Exception {
+	public ResponseEntity guardarActivo(@RequestBody ActivoDTO activoDTO) throws ArgumentosInvalidosException {
 		activoService.guardarActivo(activoDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<ActivoDTO> actualizarActivo(@RequestBody ActivoDTO activoDTO) throws Exception {
+	public ResponseEntity<ActivoDTO> actualizarActivo(@RequestBody ActivoDTO activoDTO) throws ArgumentosInvalidosException {
 		return new ResponseEntity<ActivoDTO>(activoService.actualizarActivo(activoDTO), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-tipo")
-	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(@RequestParam String tipo) throws Exception {
+	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(@RequestParam String tipo) throws ArgumentosInvalidosException, RespuestaVaciaException  {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorTipo(tipo), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-fecha")
-	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(@RequestParam String fechaCompra) throws ParseException {
+	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(@RequestParam String fechaCompra) throws ParseException, ArgumentosInvalidosException, RespuestaVaciaException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorFechaCompra(fechaCompra), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-serial")
-	public ResponseEntity<ActivoDTO> buscarPorSerial(@RequestParam Integer serial) throws Exception {
+	public ResponseEntity<ActivoDTO> buscarPorSerial(@RequestParam Integer serial) throws ArgumentosInvalidosException, RespuestaVaciaException {
 		return new ResponseEntity<ActivoDTO>(activoService.consultarPorSerial(serial), HttpStatus.OK);
 	}
 }
