@@ -20,6 +20,7 @@ public class ActivoEntity {
 	private String nombre;
 	@NonNull
 	private String tipo;
+	@Nullable
 	private String descripcion;
 	@NonNull
 	private int numeroInterno;

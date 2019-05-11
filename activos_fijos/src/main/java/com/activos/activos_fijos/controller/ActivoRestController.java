@@ -1,6 +1,6 @@
 package com.activos.activos_fijos.controller;
 
-import java.util.Date;
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,23 +31,23 @@ public class ActivoRestController {
 
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/guardar")
-	public ResponseEntity guardarActivo(@RequestBody ActivoDTO activoDTO) {
+	public ResponseEntity guardarActivo(@RequestBody ActivoDTO activoDTO) throws Exception {
 		activoService.guardarActivo(activoDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<ActivoDTO> actualizarActivo(@RequestBody ActivoDTO activoDTO) {
+	public ResponseEntity<ActivoDTO> actualizarActivo(@RequestBody ActivoDTO activoDTO) throws Exception {
 		return new ResponseEntity<ActivoDTO>(activoService.actualizarActivo(activoDTO), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-tipo")
-	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(@RequestParam String tipo) {
+	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(@RequestParam String tipo) throws Exception {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorTipo(tipo), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-fecha")
-	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(@RequestParam Date fechaCompra) {
+	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(@RequestParam String fechaCompra) throws ParseException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorFechaCompra(fechaCompra), HttpStatus.OK);
 	}
 
