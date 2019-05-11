@@ -38,7 +38,7 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	@Override
 	public void guardarActivo(ActivoDTO activoDTO) throws Exception {
 		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
-		if(!activo.isPresent())
+		if(activo.isPresent())
 			throw new Exception("Ya existe un registro con el serial ingresado");
 		validarParametros(activoDTO);
 		activoRepository.save(aEntity(activoDTO));
