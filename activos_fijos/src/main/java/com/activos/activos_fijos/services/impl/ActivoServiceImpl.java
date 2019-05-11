@@ -39,7 +39,7 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	public void guardarActivo(ActivoDTO activoDTO) throws Exception {
 		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
 		if(!activo.isPresent())
-			throw new Exception();//El serial del activo que intenta guardar ya existe
+			throw new Exception("Ya existe un registro con el serial ingresado");
 		validarParametros(activoDTO);
 		activoRepository.save(aEntity(activoDTO));
 	}
@@ -48,7 +48,7 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	public ActivoDTO actualizarActivo(ActivoDTO activoDTO) throws Exception {
 		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
 		if (!activo.isPresent()) {
-			throw new Exception();//El activo a actualizar no existe en la base de datos
+			throw new Exception("El activo a actualizar no existe en la base de datos");
 		}
 		return aDto(activoRepository.save(aEntity(activoDTO)));
 	}
@@ -56,7 +56,7 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	@Override
 	public List<ActivoDTO> consultarPorTipo(String tipo) throws Exception {
 		if (tipo == null || tipo.isEmpty())
-			throw new Exception();//El tipo no debe estar vacío o nulo
+			throw new Exception("El parámetro tipo no debe ser nulo o estar vacío");
 		List<ActivoDTO> dtos = new ArrayList<>();
 		for (ActivoEntity entity : activoRepository.findByTipo(tipo)) {
 			dtos.add(aDto(entity));
@@ -79,7 +79,7 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	public ActivoDTO consultarPorSerial(Integer serial) throws Exception {
 		Optional<ActivoEntity> activo = activoRepository.findById(serial);
 		if (!activo.isPresent())
-			throw new Exception("El activo no existe");
+			throw new Exception("No hay registros que coincidan con el serial ingresado");
 		return aDto(activo.get());
 	}
 
@@ -95,30 +95,30 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 
 	private void validarParametros(ActivoDTO activo) throws Exception {
 		if (activo == null)
-			throw new Exception();
+			throw new Exception("El activo no debe ser nulo");
 		if (activo.getAlto() < 0)
-			throw new Exception();
+			throw new Exception("El campo alto debe ser mayor a cero");
 		if (activo.getAncho() < 0)
-			throw new Exception();
+			throw new Exception("El campo ancho debe ser mayor a cero");
 		if (activo.getColor() == null || activo.getColor().isEmpty())
-			throw new Exception();
+			throw new Exception("El campo color no debe ser nulo o estar vacío");
 		if (activo.getEstado() <= 0)
-			throw new Exception();// Ingrese un estado válido
+			throw new Exception("Por favor ingrese un estado válido");// Ingrese un estado válido
 		if (activo.getFechaCompra() == null)
-			throw new Exception();
+			throw new Exception("El campo fecha de compra no debe ser nulo o estar vacío");
 		if (activo.getLargo() < 0)
-			throw new Exception();
+			throw new Exception("El campo largo debe ser mayor a cero");
 		if (activo.getNombre() == null || activo.getNombre().isEmpty())
-			throw new Exception();
+			throw new Exception("El campo nombre no debe ser nulo o estar vacío");
 		if (activo.getNumeroInterno() < 0)
-			throw new Exception();
+			throw new Exception("El campo numero interno debe ser mayor a 0");
 		if (activo.getPeso() < 0)
-			throw new Exception();
+			throw new Exception("El campo peso debe ser mayor a cero");
 		if (activo.getSerial() < 0)
-			throw new Exception();
+			throw new Exception("El campo serial debe ser mayor a cero");
 		if (activo.getTipo() == null || activo.getTipo().isEmpty())
-			throw new Exception();
+			throw new Exception("El campo tipo no debe ser nulo o estar vacío");
 		if (activo.getValor() < 0)
-			throw new Exception();
+			throw new Exception("El campo valor debe ser mayor a 0");
 	}
 }
