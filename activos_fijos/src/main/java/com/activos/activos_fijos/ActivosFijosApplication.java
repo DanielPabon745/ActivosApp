@@ -6,10 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("com.activos")
-public class ActivosFijosApplication {
+public class ActivosFijosApplication{
 
 	public static void main(String[] args) {
 		SpringApplication.run(ActivosFijosApplication.class, args);
 	}
-
 }

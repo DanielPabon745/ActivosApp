@@ -28,6 +28,10 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 
+/**
+ * @author dmo11
+ *
+ */
 @RestController
 @RequestMapping("/activos")
 @Api(tags = { "Activos Rest Controller" })
@@ -38,6 +42,12 @@ public class ActivoRestController {
 	@Autowired
 	private ActivoService activoService;
 
+	/**
+	 * Servicio de consulta de activos
+	 * 
+	 * @return <List<ActivoDTO>>
+	 * @throws RespuestaVaciaException
+	 */
 	@GetMapping("/listar")
 	@ApiOperation(value = "listar", nickname = "Consultar todos los activos", notes = "Retorna una lista con todos los activos registrados")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
@@ -48,6 +58,13 @@ public class ActivoRestController {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.listarActivos(), HttpStatus.OK);
 	}
 
+	/**
+	 * Guarda un activo parametrizado
+	 * 
+	 * @param activoDTO
+	 * @return Message Type
+	 * @throws ArgumentosInvalidosException
+	 */
 	@PostMapping("/guardar")
 	@ApiOperation(value = "guardar", nickname = "Guardar activo", notes = "Guarda un activo parametrizado")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
@@ -60,6 +77,14 @@ public class ActivoRestController {
 		return activoService.guardarActivo(activoDTO);
 	}
 
+	/**
+	 * Recibe un los datos a actualizar del activo registrado en la base de datos,
+	 * es indispensable que se incluya el serial del activo
+	 * 
+	 * @param activoDTO
+	 * @return <ActivoDTO> Actualizado
+	 * @throws ArgumentosInvalidosException
+	 */
 	@PutMapping("/actualizar")
 	@ApiOperation(value = "actualizar", nickname = "Actualizar activo", notes = "Recibe un los datos a actualizar del activo registrado en la base de datos, es indispensable que se incluya el serial del activo")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
@@ -72,6 +97,14 @@ public class ActivoRestController {
 		return new ResponseEntity<ActivoDTO>(activoService.actualizarActivo(activoDTO), HttpStatus.OK);
 	}
 
+	/**
+	 * Retorna una lista de activos respecto al tipo que le sea parametrizado
+	 * 
+	 * @param tipo
+	 * @return List<ActivoDTO>
+	 * @throws ArgumentosInvalidosException
+	 * @throws RespuestaVaciaException
+	 */
 	@GetMapping("/buscar-por-tipo")
 	@ApiOperation(value = "buscar-por-tipo", nickname = "Consultar por tipo de activo", notes = "Retorna una lista de activos respecto al tipo que le sea parametrizado")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
@@ -84,6 +117,14 @@ public class ActivoRestController {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorTipo(tipo), HttpStatus.OK);
 	}
 
+	/**
+	 * Retorna una lista de activos cuya fecha de compra coincida con la parametrizada
+	 * @param fechaCompra
+	 * @return List<ActivoDTO>
+	 * @throws ParseException
+	 * @throws ArgumentosInvalidosException
+	 * @throws RespuestaVaciaException
+	 */
 	@GetMapping("/buscar-por-fecha")
 	@ApiOperation(value = "buscar-por-fecha", nickname = "Consultar activos por fecha de compra", notes = "Retorna una lista de activos cuya fecha de compra coincida con la parametrizada")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
@@ -96,6 +137,13 @@ public class ActivoRestController {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorFechaCompra(fechaCompra), HttpStatus.OK);
 	}
 
+	/**
+	 * Retorna el activo cuyo id coincida con el parametrizado
+	 * @param serial
+	 * @return ActivoDTO
+	 * @throws ArgumentosInvalidosException
+	 * @throws RespuestaVaciaException
+	 */
 	@GetMapping("/buscar-por-serial")
 	@ApiOperation(value = "buscar-por-serial", nickname = "Consultar activo por serial", notes = "Retorna el activo cuyo id coincida con el parametrizado")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),

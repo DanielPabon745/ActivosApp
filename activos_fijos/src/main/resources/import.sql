@@ -1,3 +1,5 @@
+INSERT INTO usuario (username, password, roles) VALUES ('Admin', '$2a$10$uXOLjJdJn9abymrGfHejue71O5DxbHQma1/nB/M4fjFUUoOS/P2D6', 'ADMIN, USER');
+
 INSERT INTO localizacion (id_localizacion, nombre, ubicacion) VALUES (1, 'Colombia', NULL);
 INSERT INTO localizacion (id_localizacion, nombre, ubicacion) VALUES (2, 'Ecuador', NULL);
 INSERT INTO localizacion (id_localizacion, nombre, ubicacion) VALUES (3, 'Peru', NULL);
