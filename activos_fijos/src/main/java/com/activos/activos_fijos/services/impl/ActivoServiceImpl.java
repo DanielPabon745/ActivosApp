@@ -29,7 +29,7 @@ import com.activos.activos_fijos.util.exceptions.RespuestaVaciaException;
 
 @Service
 public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Activo> {
-
+	
 	@Autowired
 	ActivoRepository activoRepository;
 	
