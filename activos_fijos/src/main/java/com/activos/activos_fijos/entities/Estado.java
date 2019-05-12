@@ -6,14 +6,21 @@ import javax.persistence.Id;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
-public class EstadoEntity {
+@ApiModel("Estado")
+public class Estado {
 
 	@Id
+	@ApiModelProperty(value = "Id del estado", required = true)
 	private int idEstado;
 	@NonNull
+	@ApiModelProperty(value = "Nombre del estado", required = true)
 	private String nombre;
 	@Nullable
+	@ApiModelProperty(value = "Descripción opcional del estado", required = false)
 	private String descripcion;
 
 	public int getIdEstado() {

@@ -6,14 +6,21 @@ import javax.persistence.Id;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
-public class LocalizacionEntity {
+@ApiModel("Localizacion")
+public class Localizacion {
 
 	@Id
+	@ApiModelProperty(value = "Id de la localización", required = true)
 	private int idLocalizacion;
 	@NonNull
+	@ApiModelProperty(value = "Nombre de la localización", required = true)
 	private String nombre;
 	@Nullable
+	@ApiModelProperty(value = "Id de la localización donde pertenece", required = true)
 	private Integer ubicacion;
 
 	public int getIdLocalizacion() {

@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.activos.activos_fijos.entities.ActivoEntity;
+import com.activos.activos_fijos.entities.Activo;
 
 @Repository
-public interface ActivoRepository extends CrudRepository<ActivoEntity, Integer>{
+public interface ActivoRepository extends CrudRepository<Activo, Integer>{
 
-	List<ActivoEntity> findByTipo(String tipo);
+	List<Activo> findByTipo(String tipo);
 	
-	List<ActivoEntity> findByFechaCompra(Date fechaCompra);
+	List<Activo> findByFechaCompra(Date fechaCompra);
 	
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -11,44 +13,68 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
-public class ActivoEntity {
+@ApiModel("Activo")
+public class Activo {
 
 	@Id
+	@ApiModelProperty(value = "Id del activo", required = true)
 	private int serial;
 	@NonNull
+	@ApiModelProperty(value = "Nombre del activo", required = true)
 	private String nombre;
 	@NonNull
+	@ApiModelProperty(value = "Tipo de activo", required = true)
 	private String tipo;
 	@Nullable
+	@ApiModelProperty(value = "Descripcioón del activo", required = false)
 	private String descripcion;
 	@NonNull
+	@ApiModelProperty(value = "Número interno del activo", required = true)
 	private int numeroInterno;
 	@NonNull
+	@ApiModelProperty(value = "Peso del activo", required = true)
 	private int peso;
 	@NonNull
+	@ApiModelProperty(value = "Alto del activo", required = true)
 	private int alto;
 	@NonNull
+	@ApiModelProperty(value = "Ancho del activo", required = true)
 	private int ancho;
 	@NonNull
+	@ApiModelProperty(value = "Largo del activo", required = true)
 	private int largo;
 	@NonNull
+	@ApiModelProperty(value = "Valor del activo", required = true)
 	private int valor;
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@ApiModelProperty(value = "Fecha de compra del activo", required = false)
 	private Date fechaCompra;
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Nullable
+	@ApiModelProperty(value = "Fecha de baja del activo", required = false)
 	private Date fechaBaja;
 	@NonNull
+	@ApiModelProperty(value = "Estado actual del activo", required = true)
 	private int estado;
 	@NonNull
+	@ApiModelProperty(value = "Color del activo", required = true)
 	private String color;
 	@Nullable
-	private Integer idArea;
+	@ApiModelProperty(value = "Área asignada", required = false)
+	@OneToOne(optional = true)
+	@JoinColumn(name = "idArea", referencedColumnName = "idArea", nullable = true)
+	private Area area;
 	@Nullable
-	private Integer idPersona;
+	@ApiModelProperty(value = "Persona asignada", required = false)
+	@OneToOne(optional = true)
+	@JoinColumn(name = "idPersona", referencedColumnName = "idPersona", nullable = true)
+	private Persona persona;
 
 	public int getSerial() {
 		return serial;
@@ -162,20 +188,20 @@ public class ActivoEntity {
 		this.color = color;
 	}
 
-	public Integer getIdArea() {
-		return idArea;
+	public Area getArea() {
+		return area;
 	}
 
-	public void setIdArea(Integer idArea) {
-		this.idArea = idArea;
+	public void setArea(Area area) {
+		this.area = area;
 	}
 
-	public Integer getIdPersona() {
-		return idPersona;
+	public Persona getPersona() {
+		return persona;
 	}
 
-	public void setIdPersona(Integer idPersona) {
-		this.idPersona = idPersona;
+	public void setPersona(Persona persona) {
+		this.persona = persona;
 	}
 
 }

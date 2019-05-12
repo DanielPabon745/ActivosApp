@@ -11,18 +11,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlerApp {
 
 	@ExceptionHandler(ArgumentosInvalidosException.class)
-	public ResponseEntity<ErrorMessage> argumentosInvalidosException(HttpServletRequest request,
+	public ResponseEntity<Message> argumentosInvalidosException(HttpServletRequest request,
 			ArgumentosInvalidosException e) {
-		ErrorMessage message = new ErrorMessage(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
+		Message message = new Message(e.getMessage(), HttpStatus.BAD_REQUEST.value(),
 				request.getRequestURI());
-		return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Message>(message, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(RespuestaVaciaException.class)
-	public ResponseEntity<ErrorMessage> respuestaVaciaException(HttpServletRequest request,
+	public ResponseEntity<Message> respuestaVaciaException(HttpServletRequest request,
 			RespuestaVaciaException e) {
-		ErrorMessage message = new ErrorMessage(e.getMessage(), HttpStatus.NOT_FOUND.value(),
+		Message message = new Message(e.getMessage(), HttpStatus.NOT_FOUND.value(),
 				request.getRequestURI());
-		return new ResponseEntity<ErrorMessage>(message, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Message>(message, HttpStatus.NOT_FOUND);
 	}
+	
 }

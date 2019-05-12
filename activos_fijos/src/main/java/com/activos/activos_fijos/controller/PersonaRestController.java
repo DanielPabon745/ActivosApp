@@ -12,15 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.activos.activos_fijos.dtos.PersonaDTO;
 import com.activos.activos_fijos.services.PersonaService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
+
 @RestController
 @RequestMapping("/personas")
+@Api(tags = { "Activos Rest Controller" })
+@SwaggerDefinition(tags = {
+		@Tag(name = "Personas Rest Controller", description = "Controlador encargado de los servicios de consulta de personas.") })
 public class PersonaRestController {
 
 	@Autowired
 	private PersonaService personaService;
-	
+
 	@GetMapping("/listar")
-	public ResponseEntity<List<PersonaDTO>> listarPersonas(){
+	@ApiOperation(value = "listar", nickname = "Consultar todos las personas", notes = "Retorna una lista con todos las personas registradas")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request"),
+			@ApiResponse(code = 404, message = "Request not found"),
+			@ApiResponse(code = 500, message = "Internal server error") })
+	public ResponseEntity<List<PersonaDTO>> listarPersonas() {
 		return new ResponseEntity<List<PersonaDTO>>(personaService.listarPersonas(), HttpStatus.OK);
 	}
 }

@@ -4,18 +4,18 @@ package com.activos.activos_fijos.util.exceptions;
  * @author dmo11
  *
  */
-public class ErrorMessage {
+public class Message {
 	private String message;
 	private int httpStatus;
 	private String url;
 
-	public ErrorMessage(String message, int httpStatus, String url) {
+	public Message(String message, int httpStatus, String url) {
 		this.message = message;
 		this.httpStatus = httpStatus;
 		this.url = url;
 	}
 	
-	public ErrorMessage(Exception message, int httpStatus, String url) {
+	public Message(Exception message, int httpStatus, String url) {
 		this.message = message.getMessage();
 		this.httpStatus = httpStatus;
 		this.url = url;

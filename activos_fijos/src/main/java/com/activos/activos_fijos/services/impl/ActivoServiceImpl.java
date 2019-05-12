@@ -10,21 +10,34 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.activos.activos_fijos.dtos.ActivoDTO;
-import com.activos.activos_fijos.entities.ActivoEntity;
+import com.activos.activos_fijos.entities.Activo;
+import com.activos.activos_fijos.entities.Area;
+import com.activos.activos_fijos.entities.Persona;
 import com.activos.activos_fijos.repositories.ActivoRepository;
+import com.activos.activos_fijos.repositories.AreaRepository;
+import com.activos.activos_fijos.repositories.PersonaRepository;
 import com.activos.activos_fijos.services.ActivoService;
 import com.activos.activos_fijos.util.IMapper;
 import com.activos.activos_fijos.util.exceptions.ArgumentosInvalidosException;
+import com.activos.activos_fijos.util.exceptions.Message;
 import com.activos.activos_fijos.util.exceptions.RespuestaVaciaException;
 
 @Service
-public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, ActivoEntity> {
+public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Activo> {
 
 	@Autowired
 	ActivoRepository activoRepository;
+	
+	@Autowired
+	AreaRepository areaRepository;
+	
+	@Autowired
+	PersonaRepository personaRepository;
 
 	@Autowired
 	ModelMapper mapper;
@@ -32,32 +45,40 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	@Override
 	public List<ActivoDTO> listarActivos() throws RespuestaVaciaException {
 		List<ActivoDTO> dtos = new ArrayList<>();
-		Iterable<ActivoEntity> entities = activoRepository.findAll();
+		Iterable<Activo> entities = activoRepository.findAll();
 		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
 			throw new RespuestaVaciaException("No se encontraron registros de activos.");
-		for (ActivoEntity activoEntity : entities) {
+		for (Activo activoEntity : entities) {
 			dtos.add(aDto(activoEntity));
 		}
 		return dtos;
 	}
 
 	@Override
-	public ActivoDTO guardarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException {
-		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
+	public ResponseEntity<Message> guardarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException {
+		Optional<Activo> activo = activoRepository.findById(activoDTO.getSerial());
 		if (activo.isPresent())
 			throw new ArgumentosInvalidosException("Ya existe un registro con el serial ingresado.");
+		if (activoDTO.getIdPersona() != null && activoDTO.getIdArea() != null)
+			throw new ArgumentosInvalidosException("El activo solo puede asignarse a una persona o a un área, por favor corregir.");
+		if (activoDTO.getIdArea() != null)
+			validarIdArea(activoDTO.getIdArea());
+		if (activoDTO.getIdPersona() != null)
+			validarIdPersona(activoDTO.getIdPersona());
 		validarParametros(activoDTO);
-		return aDto(activoRepository.save(aEntity(activoDTO)));
+		aDto(activoRepository.save(aEntity(activoDTO)));
+		return new ResponseEntity<Message>(new Message("Activo creado", HttpStatus.OK.value(), ""), HttpStatus.OK);
 	}
 
 	@Override
 	public ActivoDTO actualizarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException {
-		Optional<ActivoEntity> activo = activoRepository.findById(activoDTO.getSerial());
+		Optional<Activo> activo = activoRepository.findById(activoDTO.getSerial());
 		if (!activo.isPresent()) {
 			throw new ArgumentosInvalidosException("El activo a actualizar no existe en la base de datos.");
 		}
 		if (activoDTO.getFechaBaja().after(activo.get().getFechaCompra()))
-			throw new ArgumentosInvalidosException("La fecha de baja ingresada no puede ser mayor a la fecha de compra del activo.");
+			throw new ArgumentosInvalidosException(
+					"La fecha de baja ingresada no puede ser mayor a la fecha de compra del activo.");
 		return aDto(activoRepository.save(aEntity(activoDTO)));
 	}
 
@@ -66,26 +87,28 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 		if (tipo == null || tipo.isEmpty())
 			throw new ArgumentosInvalidosException("El parámetro tipo no debe ser nulo o estar vacío.");
 		List<ActivoDTO> dtos = new ArrayList<>();
-		Iterable<ActivoEntity> entities = activoRepository.findByTipo(tipo);
+		Iterable<Activo> entities = activoRepository.findByTipo(tipo);
 		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
-			throw new RespuestaVaciaException("No hay registros de activos que coincidan con el tipo de activo ingresado.");
-		for (ActivoEntity entity : entities) {
+			throw new RespuestaVaciaException(
+					"No hay registros de activos que coincidan con el tipo de activo ingresado.");
+		for (Activo entity : entities) {
 			dtos.add(aDto(entity));
 		}
 		return dtos;
 	}
 
 	@Override
-	public List<ActivoDTO> consultarPorFechaCompra(String fechaCompra) throws ParseException, ArgumentosInvalidosException, RespuestaVaciaException {
+	public List<ActivoDTO> consultarPorFechaCompra(String fechaCompra)
+			throws ParseException, ArgumentosInvalidosException, RespuestaVaciaException {
 		if (fechaCompra == null || fechaCompra.isEmpty())
 			throw new ArgumentosInvalidosException("El parámetro fechaCompra no debe ser nulo o estar vacío.");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date fecha = format.parse(fechaCompra);
 		List<ActivoDTO> dtos = new ArrayList<>();
-		Iterable<ActivoEntity> entities = activoRepository.findByFechaCompra(fecha);
+		Iterable<Activo> entities = activoRepository.findByFechaCompra(fecha);
 		if (StreamSupport.stream(entities.spliterator(), false).count() == 0)
 			throw new RespuestaVaciaException("No hay registros de activos que coincidan con la fecha ingresada.");
-		for (ActivoEntity entity : entities) {
+		for (Activo entity : entities) {
 			dtos.add(aDto(entity));
 		}
 		return dtos;
@@ -95,20 +118,20 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 	public ActivoDTO consultarPorSerial(Integer serial) throws ArgumentosInvalidosException, RespuestaVaciaException {
 		if (serial == null || serial <= 0)
 			throw new ArgumentosInvalidosException("El parámetro serial no debe ser nulo o estar vacío.");
-		Optional<ActivoEntity> activo = activoRepository.findById(serial);
+		Optional<Activo> activo = activoRepository.findById(serial);
 		if (!activo.isPresent())
 			throw new RespuestaVaciaException("No hay registros que coincidan con el serial ingresado.");
 		return aDto(activo.get());
 	}
 
 	@Override
-	public ActivoDTO aDto(ActivoEntity a) {
+	public ActivoDTO aDto(Activo a) {
 		return mapper.map(a, ActivoDTO.class);
 	}
 
 	@Override
-	public ActivoEntity aEntity(ActivoDTO a) {
-		return mapper.map(a, ActivoEntity.class);
+	public Activo aEntity(ActivoDTO a) {
+		return mapper.map(a, Activo.class);
 	}
 
 	private void validarParametros(ActivoDTO activo) throws ArgumentosInvalidosException {
@@ -138,5 +161,17 @@ public class ActivoServiceImpl implements ActivoService, IMapper<ActivoDTO, Acti
 			throw new ArgumentosInvalidosException("El campo tipo no debe ser nulo o estar vacío.");
 		if (activo.getValor() < 0)
 			throw new ArgumentosInvalidosException("El campo valor debe ser mayor a 0.");
+	}
+	
+	private void validarIdArea(Integer idArea) throws ArgumentosInvalidosException {
+		Optional<Area> area = areaRepository.findById(idArea);
+		if (!area.isPresent())
+			throw new ArgumentosInvalidosException("No existe un área identificada con ese id");
+	}
+	
+	private void validarIdPersona(Integer idPersona) throws ArgumentosInvalidosException {
+		Optional<Persona> persona = personaRepository.findById(idPersona);
+		if (!persona.isPresent())
+			throw new ArgumentosInvalidosException("No existe una persona identificada con ese id");
 	}
 }

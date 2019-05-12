@@ -11,24 +11,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
-public class PersonaEntity {
+@ApiModel("Persona")
+public class Persona {
 
 	@Id
+	@ApiModelProperty(value = "Id de la persona", required = true)
 	private int idPersona;
 	@NonNull
+	@ApiModelProperty(value = "Primer nombre de la persona", required = true)
 	private String primerNombre;
 	@Nullable
+	@ApiModelProperty(value = "Segundo nombre de la persona", required = false)
 	private String segundoNombre;
 	@NonNull
+	@ApiModelProperty(value = "Primer apellido de la persona", required = true)
 	private String primerApellido;
 	@NonNull
+	@ApiModelProperty(value = "Segundo apellido de la persona", required = true)
 	private String segundoApellido;
 	@NonNull
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@ApiModelProperty(value = "Fecha de nacimiento de la persona", required = true)
 	private Date fechaNacimiento;
 	@NonNull
+	@ApiModelProperty(value = "Cargo actual de la persona", required = true)
 	private String cargo;
 
 	public int getIdPersona() {

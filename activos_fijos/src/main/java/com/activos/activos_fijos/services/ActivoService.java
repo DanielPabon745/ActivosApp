@@ -3,15 +3,18 @@ package com.activos.activos_fijos.services;
 import java.text.ParseException;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.activos.activos_fijos.dtos.ActivoDTO;
 import com.activos.activos_fijos.util.exceptions.ArgumentosInvalidosException;
+import com.activos.activos_fijos.util.exceptions.Message;
 import com.activos.activos_fijos.util.exceptions.RespuestaVaciaException;
 
 public interface ActivoService {
 
 	public List<ActivoDTO> listarActivos() throws RespuestaVaciaException;
 
-	public ActivoDTO guardarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException;
+	public ResponseEntity<Message> guardarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException;
 
 	public ActivoDTO actualizarActivo(ActivoDTO activoDTO) throws ArgumentosInvalidosException;
 

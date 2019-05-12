@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.activos.activos_fijos.dtos.PersonaDTO;
-import com.activos.activos_fijos.entities.PersonaEntity;
+import com.activos.activos_fijos.entities.Persona;
 import com.activos.activos_fijos.repositories.PersonaRepository;
 import com.activos.activos_fijos.services.PersonaService;
 import com.activos.activos_fijos.util.IMapper;
 
 @Service
-public class PersonaServiceImpl implements PersonaService, IMapper<PersonaDTO, PersonaEntity> {
+public class PersonaServiceImpl implements PersonaService, IMapper<PersonaDTO, Persona> {
 
 	@Autowired
 	ModelMapper mapper;
@@ -25,20 +25,20 @@ public class PersonaServiceImpl implements PersonaService, IMapper<PersonaDTO, P
 	@Override
 	public List<PersonaDTO> listarPersonas() {
 		List<PersonaDTO> personas = new ArrayList<>();
-		for (PersonaEntity persona : personaRepository.findAll()) {
+		for (Persona persona : personaRepository.findAll()) {
 			personas.add(aDto(persona));
 		}
 		return personas;
 	}
 
 	@Override
-	public PersonaDTO aDto(PersonaEntity a) {
+	public PersonaDTO aDto(Persona a) {
 		return mapper.map(a, PersonaDTO.class);
 	}
 
 	@Override
-	public PersonaEntity aEntity(PersonaDTO a) {
-		return mapper.map(a, PersonaEntity.class);
+	public Persona aEntity(PersonaDTO a) {
+		return mapper.map(a, Persona.class);
 	}
 
 }

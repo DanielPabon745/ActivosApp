@@ -4,17 +4,24 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 @Entity
-public class AreaEntity {
+@ApiModel("Area")
+public class Area {
 
 	@Id
-	private int idArea;
+	@ApiModelProperty(value = "Id del área", required = true)
+	private Integer idArea;
 	@NonNull
+	@ApiModelProperty(value = "Nombre del área", required = true)
 	private String nombre;
-	@Nullable
+	@NonNull
+	@ApiModelProperty(value = "Id de localización del área", required = true)
 	private Integer idLocalizacion;
+	
 
 	public int getIdArea() {
 		return idArea;
