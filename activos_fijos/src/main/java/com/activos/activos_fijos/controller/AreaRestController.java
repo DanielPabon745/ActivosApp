@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.activos.activos_fijos.dtos.AreaDTO;
 import com.activos.activos_fijos.services.AreaService;
+import com.activos.activos_fijos.util.exceptions.Message;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,9 +33,9 @@ public class AreaRestController {
 	@GetMapping("/listar")
 	@ApiOperation(value = "listar", nickname = "Consultar Areas", notes = "Retorna una lista con las areas registradas en el aplicativo")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error") })
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
 	public ResponseEntity<List<AreaDTO>> listarAreas() {
 		return new ResponseEntity<List<AreaDTO>>(areaService.listarAreas(), HttpStatus.OK);
 	}

@@ -40,77 +40,70 @@ public class ActivoRestController {
 
 	@GetMapping("/listar")
 	@ApiOperation(value = "listar", nickname = "Consultar todos los activos", notes = "Retorna una lista con todos los activos registrados")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
 	public ResponseEntity<List<ActivoDTO>> listar() throws RespuestaVaciaException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.listarActivos(), HttpStatus.OK);
 	}
 
 	@PostMapping("/guardar")
 	@ApiOperation(value = "guardar", nickname = "Guardar activo", notes = "Guarda un activo parametrizado")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
-	public ResponseEntity<Message> guardarActivo(@RequestBody ActivoDTO activoDTO)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
+	public ResponseEntity<Message> guardarActivo(
+			@ApiParam(name = "activoDTO", value = "Activo a guardar", required = true) @RequestBody ActivoDTO activoDTO)
 			throws ArgumentosInvalidosException {
 		return activoService.guardarActivo(activoDTO);
 	}
 
 	@PutMapping("/actualizar")
 	@ApiOperation(value = "actualizar", nickname = "Actualizar activo", notes = "Recibe un los datos a actualizar del activo registrado en la base de datos, es indispensable que se incluya el serial del activo")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
-	public ResponseEntity<ActivoDTO> actualizarActivo(@RequestBody ActivoDTO activoDTO)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
+	public ResponseEntity<ActivoDTO> actualizarActivo(
+			@ApiParam(name = "activoDTO", value = "Activo a actualizar", required = true) @RequestBody ActivoDTO activoDTO)
 			throws ArgumentosInvalidosException {
 		return new ResponseEntity<ActivoDTO>(activoService.actualizarActivo(activoDTO), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-tipo")
 	@ApiOperation(value = "buscar-por-tipo", nickname = "Consultar por tipo de activo", notes = "Retorna una lista de activos respecto al tipo que le sea parametrizado")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
-	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(@RequestParam String tipo)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
+	public ResponseEntity<List<ActivoDTO>> buscarPorTipo(
+			@ApiParam(name = "tipo", value = "Tipo de activo", required = true) @RequestParam String tipo)
 			throws ArgumentosInvalidosException, RespuestaVaciaException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorTipo(tipo), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-fecha")
-	@ApiOperation(value = "buscar-por-fecha" ,nickname = "Consultar activos por fecha de compra", notes = "Retorna una lista de activos cuya fecha de compra coincida con la parametrizada")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
-	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(@RequestParam String fechaCompra)
+	@ApiOperation(value = "buscar-por-fecha", nickname = "Consultar activos por fecha de compra", notes = "Retorna una lista de activos cuya fecha de compra coincida con la parametrizada")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
+	public ResponseEntity<List<ActivoDTO>> buscarPorFechaCompra(
+			@ApiParam(name = "fechaCompra", value = "Fecha de la compra del activo", required = true) @RequestParam String fechaCompra)
 			throws ParseException, ArgumentosInvalidosException, RespuestaVaciaException {
 		return new ResponseEntity<List<ActivoDTO>>(activoService.consultarPorFechaCompra(fechaCompra), HttpStatus.OK);
 	}
 
 	@GetMapping("/buscar-por-serial")
 	@ApiOperation(value = "buscar-por-serial", nickname = "Consultar activo por serial", notes = "Retorna el activo cuyo id coincida con el parametrizado")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Success in process"),
-			@ApiResponse(code = 400, message = "Bad parameters request"),
-			@ApiResponse(code = 404, message = "Request not found"),
-			@ApiResponse(code = 500, message = "Internal server error")
-	})
-	public ResponseEntity<ActivoDTO> buscarPorSerial(@ApiParam(name = "Serial del activo", required = true) @RequestParam Integer serial)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success in process"),
+			@ApiResponse(code = 400, message = "Bad parameters request", response = Message.class),
+			@ApiResponse(code = 404, message = "Request not found", response = Message.class),
+			@ApiResponse(code = 500, message = "Internal server error", response = Message.class) })
+	public ResponseEntity<ActivoDTO> buscarPorSerial(
+			@ApiParam(name = "serial", value = "Serial del activo", required = true) @RequestParam Integer serial)
 			throws ArgumentosInvalidosException, RespuestaVaciaException {
 		return new ResponseEntity<ActivoDTO>(activoService.consultarPorSerial(serial), HttpStatus.OK);
 	}

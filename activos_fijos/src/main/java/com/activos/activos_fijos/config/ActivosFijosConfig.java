@@ -22,21 +22,21 @@ public class ActivosFijosConfig {
 	public ModelMapper modelMapper() {
 		ModelMapper mm = new ModelMapper();
 		mm.getConfiguration().setAmbiguityIgnored(true);
-	    return mm;
+		return mm;
 	}
 
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.activos.activos_fijos.controller"))
-				.paths(PathSelectors.any()).build().apiInfo(apiInfo());
+				.apis(RequestHandlerSelectors.basePackage("com.activos.activos_fijos")).paths(PathSelectors.any())
+				.build().apiInfo(apiInfo()).useDefaultResponseMessages(false);
 	}
 
 	private ApiInfo apiInfo() {
 		return new ApiInfo("Activos fijos API",
 				"Servicios para la consulta, creación y actualización de activos fijos de una organización.", "API TOS",
 				"Terms of service", new Contact("Daniel Mozo",
-						"https://www.linkedin.com/in/daniel-eduardo-mozo-pabón-2a2754178", "danielpabon745@gmail.com"),
+						"www.linkedin.com/in/danielpabon", "danielpabon745@gmail.com"),
 				"License of API", "API license URL", Collections.emptyList());
 	}
 }
