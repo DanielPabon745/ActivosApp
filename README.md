@@ -25,8 +25,11 @@ Se debe contar con el gestor de dependencias Maven instalado previamente ([Insta
 > mvn clean install
 
 ## Despliegue
+
 Desde la ubicación donde se encuentra el .jar generado en el paso anterior ejecute desde la consola de comandos la siguiente línea:
 > java -jar .\target\activos_fijos-0.0.1-SNAPSHOT.jar
+
+Es indispensable que se tenga configurado el jdk para Maven, de lo contrario lanzará el siguiente error: `No compiler is provided in this environment.` - [Solución](http://roufid.com/no-compiler-is-provided-in-this-environment/). En caso de modificar las variables de entorno es necesario reiniciar el ordenador para que tome los cambios.
 
 Cuando se tenga todo listo se pueden ejecutar los servicios desde Postman para revisar su funcionamiento. 
 
