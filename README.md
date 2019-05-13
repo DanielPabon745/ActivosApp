@@ -37,6 +37,7 @@ Cuando se tenga todo listo se pueden ejecutar los servicios desde Postman para r
 Para poder consumir los servicios del API, primero es necesario solicitar un token a la direccion `http://localhost:8080/users/auth`, con los siguientes datos:
 * Usuario: Admin
 * Contraseña: Infinite
+
 La información en detalle de como consumir los servicios se puede ver en la colección de Postman disponible en la raíz del repositorio.
 
 ## Swagger
