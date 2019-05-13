@@ -1,7 +1,7 @@
 # ActivosApp
 Proyecto para el manejo de activos fijos de una organización.
 
-EL proyecto está desarrollado bajo Java con `Spring boot` y `JPA`, `MySQL` y `JWT`.
+El proyecto está desarrollado bajo Java con `Spring boot` y `JPA`, `MySQL` y `JWT`.
 Los logs de la aplicación están generados en el directorio /logs.
 
 El desarrollo del aplicativo se hizo bajo la estructura de `Gitflow Workflow`, utilizando una rama extra entre master y develop para pruebas funcionales.
@@ -26,7 +26,7 @@ Se debe contar con el gestor de dependencias Maven instalado previamente ([Insta
 
 ## Despliegue
 Desde la ubicación donde se encuentra el .jar generado en el paso anterior ejecute desde la consola de comandos la siguiente línea:
-> java -jar target\activos_fijos-0.0.1-SNAPSHOT.jar
+> java -jar .\target\activos_fijos-0.0.1-SNAPSHOT.jar
 
 Cuando se tenga todo listo se pueden ejecutar los servicios desde Postman para revisar su funcionamiento. 
 
