@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "79b1ceb7-2bd6-48b2-a77d-f49aedd319d5",
+		"name": "ActivosFijosApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar personas",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJVU0VSIl0sImlhdCI6MTU1NzcwMTM5NSwiZXhwIjoxNTU3Nzg3Nzk1fQ.YGOJ6Z9Bjyhdq26IVonRRQnENGAXhVb9A14PNBlYbqmNpY33Z26PSrji8YziK8LYkrbT_fmlqWJyIFg_b9jwJQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/personas/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"personas",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar areas",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBZG1pbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iLCJVU0VSIl0sImlhdCI6MTU1NzcwMzc5NiwiZXhwIjoxNTU3NzkwMTk2fQ.EDe93urKRpbrk_RqfkfwIxC5XuRC4QnNsbteRCrmc5XifBXhxFbRoV-ao-tTkWG0KcHtdj_2VBurGwWu0cpKKQ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/areas/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"areas",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar activos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/listar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"listar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Activo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serial\": 23,\n    \"nombre\": \"Impresora láser\",\n    \"tipo\": \"Tecnología\",\n    \"descripcion\": \"Teclado para computador\",\n    \"numeroInterno\": 111,\n    \"peso\": 5,\n    \"alto\": 2,\n    \"ancho\": 30,\n    \"largo\": 15,\n    \"valor\": 89000,\n    \"fechaCompra\": \"2015-08-11\",\n    \"fechaBaja\": null,\n    \"estado\": 3,\n    \"color\": \"Negro\",\n    \"idArea\": 4,\n    \"idPersona\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/guardar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"guardar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar activo",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serial\": 1000022,\n    \"nombre\": \"Impresora láser\",\n    \"tipo\": \"Tecnología\",\n    \"descripcion\": \"Teclado para computador\",\n    \"numeroInterno\": 111,\n    \"peso\": 5,\n    \"alto\": 2,\n    \"ancho\": 30,\n    \"largo\": 15,\n    \"valor\": 89000,\n    \"fechaCompra\": \"2015-08-11\",\n    \"fechaBaja\": null,\n    \"estado\": 3,\n    \"color\": \"Negro\",\n    \"idArea\": 1,\n    \"idPersona\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/actualizar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"actualizar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar activos por tipo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/buscar-por-tipo?tipo=Horno",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"buscar-por-tipo"
+					],
+					"query": [
+						{
+							"key": "tipo",
+							"value": "Horno"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar activos por serial",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/buscar-por-serial?serial=1000026",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"buscar-por-serial"
+					],
+					"query": [
+						{
+							"key": "serial",
+							"value": "1000026"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consultar activos por fecha de compra",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/activos/buscar-por-fecha?fechaCompra=abbbcc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activos",
+						"buscar-por-fecha"
+					],
+					"query": [
+						{
+							"key": "fechaCompra",
+							"value": "abbbcc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Autenticación",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"Admin\",\n\t\"password\": \"Infinite\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
