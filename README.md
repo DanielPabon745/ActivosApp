@@ -33,4 +33,11 @@ Es indispensable que se tenga configurado el jdk para Maven, de lo contrario lan
 
 Cuando se tenga todo listo se pueden ejecutar los servicios desde Postman para revisar su funcionamiento. 
 
-La colección de Postman está disponible en la carpeta raíz del repositorio.
+## Uso
+Para poder consumir los servicios del API, primero es necesario solicitar un token a la direccion `http://localhost:8080/users/auth`, con los siguientes datos:
+* Usuario: Admin
+* Contraseña: Infinite
+La información en detalle de como consumir los servicios se puede ver en la colección de Postman disponible en la raíz del repositorio.
+
+## Swagger
+Para visualizar la documentación del API se debe dirigir a la dirección: `http://localhost:8080/swagger-ui.html`.
