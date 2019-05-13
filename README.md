@@ -4,6 +4,11 @@ Proyecto para el manejo de activos fijos de una organización.
 EL proyecto está desarrollado bajo Java con `Spring boot` y `JPA`, `MySQL` y `JWT`.
 Los logs de la aplicación están generados en el directorio /logs.
 
+El desarrollo del aplicativo se hizo bajo la estructura de `Gitflow Workflow`, utilizando una rama extra entre master y develop para pruebas funcionales.
+<p align="center">
+  <img width="460" height="300" src="https://wac-cdn.atlassian.com/dam/jcr:b5259cce-6245-49f2-b89b-9871f9ee3fa4/03%20(2).svg?cdnVersion=331">
+</p>
+
 ## Configuración
 El motor de base de datos es MySQL(Version: 8.0.16), gestionado mediante MySQL Workbench 8. Es necesario crear un esquema en local con la siguiente información:
 * Nombre del esquema: activosapp
